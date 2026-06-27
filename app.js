@@ -86,6 +86,8 @@ function openModal(html){
   const body = $('#modalBody');
   body.innerHTML = html;
   modal.hidden = false;
+  // overlay taşınmazsa (bazı tarayıcılarda) ek garanti
+  modal.style.display = 'flex';
 }
 
 function closeModal(){
