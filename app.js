@@ -166,6 +166,7 @@ $('#btnExportMismatched').addEventListener('click', ()=>alert('Export eklenecek 
 
 // --- Top bar routing ---
 $('#btnUpload').addEventListener('click', ()=>{
+  closeModal();
   setActive('viewUpload');
 });
 

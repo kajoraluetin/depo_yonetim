@@ -89,7 +89,8 @@
 
       <section id="viewUpload" class="view">
         <h1>⬆️ ABAS Veri Yükleme</h1>
-        <p class="muted">Aşağıdaki formdan Excel/CSV yükleyin. Dosyadaki sütunları otomatik algılayıp ekranda önizleme yapacağız.</p>
+        <p class="muted">Dosyanızı yükleyin, ekranda sütun/önizleme göreceksiniz. (Şimdilik hesaplama TODO)</p>
+
 
         <div class="toolbar" style="margin-top:18px">
           <input id="uploadFile" type="file" accept=".xlsx,.xls,.csv" class="input" style="flex:unset;min-width:320px" />
@@ -118,7 +119,7 @@
     </main>
   </div>
 
-  <div id="modal" class="modal" hidden>
+  <div id="modal" class="modal" role="dialog" aria-modal="true" hidden>
     <div class="modal-card">
       <button id="modalClose" class="modal-close">✕</button>
       <div class="modal-body" id="modalBody"></div>
