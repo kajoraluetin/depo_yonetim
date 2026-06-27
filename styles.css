@@ -55,10 +55,15 @@ h1{margin:0 0 14px; font-size:28px; letter-spacing:-.4px}
 .toolbar{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:10px 0 12px}
 .input{flex:1;min-width:240px;border:1px solid var(--border);border-radius:12px;padding:12px 12px;outline:none;background:#fff}
 
-.table-wrap{overflow:auto; border-radius:14px; border:1px solid var(--border)}
-.table{width:100%;border-collapse:collapse;min-width:900px;background:#fff}
+.table-wrap{overflow:auto; border-radius:14px; border:1px solid var(--border); background:#fff}
+.table{width:100%;border-collapse:separate;border-spacing:0;min-width:900px;background:#fff}
 th,td{padding:12px 12px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
-th{background:linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color:#fff; position:sticky; top:0}
+th{background:linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color:#fff; position:sticky; top:0; z-index:1}
+.table tbody tr:nth-child(odd){background:#fff}
+.table tbody tr:nth-child(even){background:#fbfbff}
+.table tbody tr:hover{background:#f3f0ff}
+.table td{white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:220px}
+
 
 .badge{
   display:inline-flex;align-items:center;gap:6px;

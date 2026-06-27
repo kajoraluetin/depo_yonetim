@@ -174,35 +174,55 @@ $('#btnUpload').addEventListener('click', ()=>{
 
 // --- Upload + Preview ---
 function normalizeHeader(h){
-  return (h ?? '').toString().trim();
+  return (h ?? '').toString().replace(/\s+/g,' ').trim();
+}
+
+
+const PREVIEW_COLUMNS_MAX = 16;
+const REQUIRED_UPLOAD_COLUMNS = [
+  'Ambar-konumu','Ambar grubu','Sorumlu Personel','No','Mal','Ürün Açıklaması','Atık',
+  'Min.Stok.Seviyesi','Minimum Temin Miktarı','Ortalama fiyat','Toplam Stok Miktarı',
+  'Stok Kırılım Miktarı','Malzeme Alım Tarihi','Ambar birimi','Proje','İşletim dilinde tanım','Lot'
+];
+
+function pickPreviewColumns(keys){
+  const normalizedKeys = keys.map(normalizeHeader);
+  const requiredSet = new Set(REQUIRED_UPLOAD_COLUMNS.map(normalizeHeader));
+
+  // Önce required kolonları sırayla al
+  const requiredInFile = REQUIRED_UPLOAD_COLUMNS.map(normalizeHeader).filter(k => requiredSet.has(k) && normalizedKeys.includes(k));
+  const rest = normalizedKeys.filter(k => !requiredInFile.includes(k));
+
+  const final = [...requiredInFile, ...rest];
+  return final.slice(0, PREVIEW_COLUMNS_MAX);
 }
 
 function makePreviewColumns(keys){
   const head = $('#uploadHead');
   head.innerHTML = '';
-  // max 10 kolonu göster
-  const limited = keys.slice(0, 10);
-  for(const k of limited){
-    const th = document.createElement('th');
-    th.textContent = k;
-    head.appendChild(th);
-  }
+
+  const cols = pickPreviewColumns(keys);
+  head.innerHTML = cols.map(c => `<th title="${c}">${c}</th>`).join('');
 }
 
 function renderPreviewRows(rows, columns){
   const tbody = $('#uploadPreview');
   tbody.innerHTML = '';
+
+  const cols = columns;
   for(const r of rows){
     const tr = document.createElement('tr');
-    const limitedCols = columns.slice(0, 10);
-    for(const c of limitedCols){
+    for(const c of cols){
       const td = document.createElement('td');
-      td.textContent = r[c] ?? '';
+      const v = r[c];
+      td.textContent = (v === null || v === undefined) ? '' : String(v);
+      td.title = td.textContent; // tooltip için
       tr.appendChild(td);
     }
     tbody.appendChild(tr);
   }
 }
+
 
 async function handleUpload(file){
   if(!file) return;
@@ -222,9 +242,10 @@ async function handleUpload(file){
   makePreviewColumns(keys);
 
   const preview = json.slice(0, 30);
-  renderPreviewRows(preview, keys);
+  const previewCols = pickPreviewColumns(keys);
+  renderPreviewRows(preview, previewCols);
 
-  meta.textContent = `Önizleme: ${json.length} satır (ilk ${Math.min(30, json.length)})`;
+  meta.textContent = `Önizleme: ${json.length} satır (kolon: ${previewCols.length}, ilk 30 satır)`;
 }
 
 $('#btnProcessUpload').addEventListener('click', async ()=>{
