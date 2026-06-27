@@ -16,6 +16,7 @@
       <div class="actions">
         <button id="btnMissing" class="pill">Eksik Ürünler</button>
         <button id="btnMismatched" class="pill">Eşleşmeyen Stoklar</button>
+        <button id="btnUpload" class="pill pill-accent">Excel/CSV Yükle</button>
       </div>
     </header>
 
@@ -85,6 +86,35 @@
           </table>
         </div>
       </section>
+
+      <section id="viewUpload" class="view">
+        <h1>⬆️ ABAS Veri Yükleme</h1>
+        <p class="muted">Aşağıdaki formdan Excel/CSV yükleyin. Dosyadaki sütunları otomatik algılayıp ekranda önizleme yapacağız.</p>
+
+        <div class="toolbar" style="margin-top:18px">
+          <input id="uploadFile" type="file" accept=".xlsx,.xls,.csv" class="input" style="flex:unset;min-width:320px" />
+          <button id="btnProcessUpload" class="pill pill-accent">İçeriği Al</button>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <div style="display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap">
+            <div>
+              <div style="font-weight:800">Önizleme</div>
+              <div class="muted" id="uploadMeta">Yükleme bekleniyor...</div>
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+              <button id="btnDownloadTemplate" class="pill">Şablon</button>
+              <button id="btnApplyToView" class="pill pill-accent">Eksik/Stok için hesapla (TODO)</button>
+            </div>
+          </div>
+          <div class="table-wrap" style="margin-top:12px">
+            <table class="table" aria-label="Yükleme önizleme">
+              <thead><tr id="uploadHead"></tr></thead>
+              <tbody id="uploadPreview"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
     </main>
   </div>
 
@@ -95,6 +125,7 @@
     </div>
   </div>
 
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
   <script src="./app.js"></script>
 </body>
 </html>

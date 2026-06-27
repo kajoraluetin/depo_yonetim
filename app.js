@@ -7,6 +7,11 @@
 
 const API_BASE = '';
 
+// upload sonrası excel parser (SheetJS) varsayımı yapılır.
+// (index.html içinde script tag ile yüklü.)
+
+
+
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
 
@@ -158,4 +163,84 @@ addSearchHandler('mismatchSearch','mismatchedBody', (row)=> row.textContent);
 
 $('#btnExportMissing').addEventListener('click', ()=>alert('Export eklenecek (TODO).'));
 $('#btnExportMismatched').addEventListener('click', ()=>alert('Export eklenecek (TODO).'));
+
+// --- Top bar routing ---
+$('#btnUpload').addEventListener('click', ()=>{
+  setActive('viewUpload');
+});
+
+// --- Upload + Preview ---
+function normalizeHeader(h){
+  return (h ?? '').toString().trim();
+}
+
+function makePreviewColumns(keys){
+  const head = $('#uploadHead');
+  head.innerHTML = '';
+  // max 10 kolonu göster
+  const limited = keys.slice(0, 10);
+  for(const k of limited){
+    const th = document.createElement('th');
+    th.textContent = k;
+    head.appendChild(th);
+  }
+}
+
+function renderPreviewRows(rows, columns){
+  const tbody = $('#uploadPreview');
+  tbody.innerHTML = '';
+  for(const r of rows){
+    const tr = document.createElement('tr');
+    const limitedCols = columns.slice(0, 10);
+    for(const c of limitedCols){
+      const td = document.createElement('td');
+      td.textContent = r[c] ?? '';
+      tr.appendChild(td);
+    }
+    tbody.appendChild(tr);
+  }
+}
+
+async function handleUpload(file){
+  if(!file) return;
+  const meta = $('#uploadMeta');
+  meta.textContent = 'Dosya okunuyor...';
+
+  const buf = await file.arrayBuffer();
+  const wb = XLSX.read(buf, {type:'array'});
+  const sheetName = wb.SheetNames[0];
+  const ws = wb.Sheets[sheetName];
+
+  // header row'u ilk satır kabul et
+  const json = XLSX.utils.sheet_to_json(ws, {defval:'', raw:true});
+  const keys = Array.from(new Set(json.flatMap(o=>Object.keys(o))));
+
+  $('#uploadHead').innerHTML = '';
+  makePreviewColumns(keys);
+
+  const preview = json.slice(0, 30);
+  renderPreviewRows(preview, keys);
+
+  meta.textContent = `Önizleme: ${json.length} satır (ilk ${Math.min(30, json.length)})`;
+}
+
+$('#btnProcessUpload').addEventListener('click', async ()=>{
+  const input = $('#uploadFile');
+  const file = input.files?.[0];
+
+  if(!file){
+    $('#uploadMeta').textContent = 'Lütfen bir .xlsx/.xls/.csv dosyası seçin.';
+    return;
+  }
+
+  try{
+    // UX
+    $('#uploadMeta').textContent = 'Okunuyor...';
+    await handleUpload(file);
+  }catch(e){
+    console.error(e);
+    $('#uploadMeta').textContent = 'Dosya okunamadı. Biçimi kontrol edin.';
+  }
+});
+
 
