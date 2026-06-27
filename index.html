@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Depo Yönetim</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">📦 Depo Yönetim</div>
+      <div class="actions">
+        <button id="btnMissing" class="pill">Eksik Ürünler</button>
+        <button id="btnMismatched" class="pill">Eşleşmeyen Stoklar</button>
+      </div>
+    </header>
+
+    <main class="content">
+      <section id="viewDashboard" class="view active">
+        <h1>Dashboard</h1>
+        <p class="muted">
+          Mevcut uygulamanın web versiyonuna geçiş devam ediyor.
+        </p>
+        <div class="grid">
+          <div class="card">
+            <h3>Eksik Ürünler</h3>
+            <p>İki liste arasındaki farklar.</p>
+          </div>
+          <div class="card">
+            <h3>Eşleşmeyen Stoklar</h3>
+            <p>RAF Stok vs Toplam Stok karşılaştırması.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="viewMissing" class="view">
+        <h1>🔍 Eksik Ürünler</h1>
+        <div class="toolbar">
+          <input id="missingSearch" class="input" placeholder="Ürün ara..." />
+          <button id="btnExportMissing" class="pill pill-accent">Excel/CSV</button>
+        </div>
+        <div class="table-wrap">
+          <table class="table" aria-label="Eksik Ürünler">
+            <thead>
+              <tr>
+                <th>ABAS Kodu</th>
+                <th>Mal Adı</th>
+                <th>Arama Kelimesi</th>
+                <th>Stok Birimi</th>
+                <th>Toplam Stok</th>
+                <th>Ortalama Fiyat</th>
+                <th>Lot</th>
+                <th>Eksik Olduğu Sayfa</th>
+              </tr>
+            </thead>
+            <tbody id="missingBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="viewMismatched" class="view">
+        <h1>⚠️ Eşleşmeyen Stoklar</h1>
+        <div class="toolbar">
+          <input id="mismatchSearch" class="input" placeholder="ABAS kodu / ürün ara..." />
+          <button id="btnExportMismatched" class="pill pill-accent">Excel/CSV</button>
+        </div>
+        <div class="table-wrap">
+          <table class="table" aria-label="Eşleşmeyen Stoklar">
+            <thead>
+              <tr>
+                <th>ABAS Kodu</th>
+                <th>Mal Adı</th>
+                <th>RAF No</th>
+                <th>Raf Adresi</th>
+                <th>RAF Stok</th>
+                <th>Abas Stok</th>
+                <th>Durum</th>
+              </tr>
+            </thead>
+            <tbody id="mismatchedBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="modal" class="modal" hidden>
+    <div class="modal-card">
+      <button id="modalClose" class="modal-close">✕</button>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
+
