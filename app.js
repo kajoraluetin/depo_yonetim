@@ -173,10 +173,15 @@ $('#btnExportMissing').addEventListener('click', ()=>alert('Export eklenecek (TO
 $('#btnExportMismatched').addEventListener('click', ()=>alert('Export eklenecek (TODO).'));
 
 // --- Top bar routing ---
+$('#btnGoDashboard').addEventListener('click', ()=>{
+  setActive('viewDashboard');
+});
+
 $('#btnUpload').addEventListener('click', ()=>{
   closeModal();
   setActive('viewUpload');
 });
+
 
 // --- Upload + Preview ---
 function normalizeHeader(h){

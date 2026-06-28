@@ -1,6 +1,7 @@
 :root{
-  --bg1:#f093fb;
-  --bg2:#f5576c;
+  --bg1:#111827;
+  --bg2:#2563eb;
+
   --text:#2d3748;
   --muted:#718096;
   --card:rgba(255,255,255,.92);
@@ -17,8 +18,9 @@ body{
   font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;
   color:var(--text);
   background:
-    radial-gradient(1000px 600px at 15% 10%, rgba(240,147,251,.65), transparent 60%),
-    radial-gradient(900px 520px at 85% 20%, rgba(245,87,108,.55), transparent 60%),
+radial-gradient(1000px 600px at 15% 10%, rgba(37,99,235,.40), transparent 60%),
+    radial-gradient(900px 520px at 85% 20%, rgba(124,58,237,.35), transparent 60%),
+
     linear-gradient(135deg,var(--bg1) 0%, var(--bg2) 100%);
   min-height:100vh;
 }
@@ -48,9 +50,10 @@ body{
   outline-offset:2px;
 }
 .pill-accent{
-  background:linear-gradient(135deg,#f093fb 0%, #f5576c 100%);
+  background:linear-gradient(135deg,#2563eb 0%, #7c3aed 100%);
   color:#fff;border:none;
 }
+
 
 
 .content{margin-top:18px}
@@ -70,7 +73,8 @@ h1{margin:0 0 14px; font-size:28px; letter-spacing:-.4px}
 .table{width:100%;border-collapse:separate;border-spacing:0;min-width:900px;background:#fff}
 th,td{padding:12px 12px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
 th{
-  background:linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  background:linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+
   color:#fff;
   position:sticky;
   top:0;
