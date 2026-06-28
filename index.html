@@ -12,8 +12,8 @@
 <body>
   <div class="app">
     <header class="topbar">
-      <div class="brand">ABAS Depo Yönetimi</div>
-      <div class="actions">
+      <div class="brand" aria-label="Depo karşılaştırma">Depo Karşılaştırma</div>
+      <div class="actions" style="align-items:center">
         <button id="btnGoDashboard" class="pill">Ana Sayfa</button>
 
         <div class="depo-switch" aria-label="Depo seçimi" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
@@ -30,25 +30,20 @@
 
     <main class="content">
       <section id="viewDashboard" class="view active">
-        <h1>Ana Sayfa</h1>
-
-        <p class="muted">
-          Mevcut uygulamanın web versiyonuna geçiş devam ediyor.
-        </p>
-        <div class="grid">
-          <div class="card">
-            <h3>Eksik Ürünler</h3>
-            <p>İki liste arasındaki farklar.</p>
-          </div>
-          <div class="card">
-            <h3>Eşleşmeyen Stoklar</h3>
-            <p>RAF Stok vs Toplam Stok karşılaştırması.</p>
-          </div>
+        <h1 style="display:none">Ana Sayfa</h1>
+        <div class="card" style="padding:18px">
+          <h3 style="margin:0 0 8px">Depo Seçin</h3>
+          <p class="muted" style="margin:0">ABAS Depo veya Fiziki Depo seçtiğinizde import/export ve ürün listeleri açılacak.</p>
         </div>
       </section>
 
+
       <section id="viewMissing" class="view">
         <h1>🔍 Eksik Ürünler</h1>
+        <div class="toolbar" style="margin-top:-4px">
+          <button id="btnBackUpload" class="pill">← Geri</button>
+        </div>
+
         <div class="toolbar">
           <input id="missingSearch" class="input" placeholder="Ürün ara..." />
           <button id="btnExportMissing" class="pill pill-accent">Excel/CSV</button>
@@ -97,11 +92,12 @@
       </section>
 
       <section id="viewUpload" class="view">
-        <h1>⬆️ ABAS Veri Yükleme</h1>
-        <p class="muted">
-          Bu ekran, Google Sheets’ten dışa aktarılmış excel/csv dosyanızı yükler.
+        <h1 id="uploadTitle">⬆️ Depo Veri Yükleme</h1>
+        <p class="muted" id="uploadSubtitle">
+          Bu ekran, excel/csv dosyanızı yükler (ABAS ve Fiziki Depo için aynı şema).
           ÖNEMLİ: Şu başlıkları esas alıyoruz: <b>Ambar-konumu</b>, <b>Ambar grubu</b>, <b>Sorumlu Personel</b>, <b>No</b>, <b>Mal</b>, <b>Ürün Açıklaması</b>, <b>Atık</b>, <b>Min.Stok.Seviyesi</b>, <b>Minimum Temin Miktarı</b>, <b>Ortalama fiyat</b>, <b>Toplam Stok Miktarı</b>, <b>Stok Kırılım Miktarı</b>, <b>Malzeme Alım Tarihi</b>, <b>Ambar birimi</b>, <b>Proje</b>, <b>İşletim dilinde tanım</b>, <b>Lot</b>.
         </p>
+
 
         <div class="toolbar" style="margin-top:18px">
           <input id="uploadFile" type="file" accept=".xlsx,.xls,.csv" class="input" style="flex:unset;min-width:320px" />

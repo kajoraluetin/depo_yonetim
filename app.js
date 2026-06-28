@@ -215,6 +215,7 @@ $('#btnGoDashboard').addEventListener('click', ()=>{
   setActive('viewDashboard');
 });
 
+
 $('#btnUpload').addEventListener('click', ()=>{
   closeModal();
   setActive('viewUpload');
