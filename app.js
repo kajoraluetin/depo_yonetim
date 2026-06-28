@@ -172,6 +172,44 @@ addSearchHandler('mismatchSearch','mismatchedBody', (row)=> row.textContent);
 $('#btnExportMissing').addEventListener('click', ()=>alert('Export eklenecek (TODO).'));
 $('#btnExportMismatched').addEventListener('click', ()=>alert('Export eklenecek (TODO).'));
 
+// --- Depo seçimi ---
+const DEPO_KEYS = {
+  ABAS: 'abas',
+  FIZIKI: 'fiziki'
+};
+
+const depoState = {
+  aktif: DEPO_KEYS.ABAS
+};
+
+function updateDepoButtons(){
+  const abasBtn = $('#btnDepoAbas');
+  const fizBtn = $('#btnDepoFiziki');
+  const isAbas = depoState.aktif === DEPO_KEYS.ABAS;
+  if(isAbas){
+    abasBtn.classList.add('pill-accent');
+    fizBtn.classList.remove('pill-accent');
+  }else{
+    fizBtn.classList.add('pill-accent');
+    abasBtn.classList.remove('pill-accent');
+  }
+}
+
+$('#btnDepoAbas').addEventListener('click', ()=>{
+  depoState.aktif = DEPO_KEYS.ABAS;
+  updateDepoButtons();
+  // demo için: dashboard'a dön
+  setActive('viewDashboard');
+});
+
+$('#btnDepoFiziki').addEventListener('click', ()=>{
+  depoState.aktif = DEPO_KEYS.FIZIKI;
+  updateDepoButtons();
+  setActive('viewDashboard');
+});
+
+updateDepoButtons();
+
 // --- Top bar routing ---
 $('#btnGoDashboard').addEventListener('click', ()=>{
   setActive('viewDashboard');
@@ -181,6 +219,7 @@ $('#btnUpload').addEventListener('click', ()=>{
   closeModal();
   setActive('viewUpload');
 });
+
 
 
 // --- Upload + Preview ---
