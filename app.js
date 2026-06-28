@@ -88,11 +88,17 @@ function openModal(html){
   modal.hidden = false;
   // overlay taşınmazsa (bazı tarayıcılarda) ek garanti
   modal.style.display = 'flex';
+  // body scroll kilidi
+  document.body.style.overflow = 'hidden';
 }
+
 
 function closeModal(){
   $('#modal').hidden = true;
+  // body scroll'u geri al
+  document.body.style.overflow = '';
 }
+
 
 $('#modalClose').addEventListener('click', closeModal);
 $('#modal').addEventListener('click', (e)=>{
