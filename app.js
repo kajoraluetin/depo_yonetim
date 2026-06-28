@@ -137,7 +137,28 @@ async function openProductModal(abasKodu){
   `);
 }
 
-// Toolbar actions
+// --- Sol menü actions ---
+$('#sideBtnDashboard').addEventListener('click', ()=>setActive('viewDashboard'));
+
+$('#sideBtnMissing').addEventListener('click', async ()=>{
+  setActive('viewMissing');
+  const demoMissing = [
+    {abasKodu:'100001', malAdi:'Mal 1', aramaKelimesi:'Arama 1', stokBirimi:'ADET', toplamStok:10, ortalamaFiyat:12.5, lot:'L-1', eksikSayfa:'2025 GÜNCEL LİSTE'}
+  ];
+  renderMissing(demoMissing);
+});
+
+$('#sideBtnMismatched').addEventListener('click', async ()=>{
+  setActive('viewMismatched');
+  const demoMismatched = [
+    {abasKodu:'100001', malAdi:'Mal 1', rafNo:'R-1', rafAdresi:'A-1', rafStok:5, toplamStok:10}
+  ];
+  renderMismatched(demoMismatched);
+});
+
+$('#sideBtnUpload').addEventListener('click', ()=>setActive('viewUpload'));
+
+// Toolbar actions (üst menü)
 $('#btnMissing').addEventListener('click', async ()=>{
   setActive('viewMissing');
   const demoMissing = [
@@ -153,6 +174,7 @@ $('#btnMismatched').addEventListener('click', async ()=>{
   ];
   renderMismatched(demoMismatched);
 });
+
 
 function addSearchHandler(inputId, tableBodyId, getText){
   const input = $(`#${inputId}`);
@@ -195,25 +217,41 @@ function updateDepoButtons(){
   }
 }
 
+function depoUiText(){
+  return depoState.aktif === DEPO_KEYS.ABAS ? 'ABAS' : 'Fiziki Depo';
+}
+
+function updateActiveSideFromSelection(){
+  // Depo seçilince sol menüde default: Eksik Ürünler + Upload'ı da aynı iskelet üzerinden göstereceğiz.
+  // Şimdilik demo akış.
+  const selectedView = depoState.aktif === DEPO_KEYS.ABAS ? 'viewMissing' : 'viewUpload';
+  setActive(selectedView);
+}
+
+
 $('#btnDepoAbas').addEventListener('click', ()=>{
   depoState.aktif = DEPO_KEYS.ABAS;
   updateDepoButtons();
-  // demo için: dashboard'a dön
-  setActive('viewDashboard');
+  updateActiveSideFromSelection();
 });
 
 $('#btnDepoFiziki').addEventListener('click', ()=>{
   depoState.aktif = DEPO_KEYS.FIZIKI;
   updateDepoButtons();
-  setActive('viewDashboard');
+  updateActiveSideFromSelection();
 });
 
+
 updateDepoButtons();
+
+// Varsayılan: Ana sayfa
+setActive('viewDashboard');
 
 // --- Top bar routing ---
 $('#btnGoDashboard').addEventListener('click', ()=>{
   setActive('viewDashboard');
 });
+
 
 
 $('#btnUpload').addEventListener('click', ()=>{

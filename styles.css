@@ -57,8 +57,32 @@ radial-gradient(1000px 600px at 15% 10%, rgba(37,99,235,.40), transparent 60%),
 
 
 .content{margin-top:18px}
+
+.layout{display:grid;grid-template-columns:280px 1fr;gap:16px;align-items:start}
+.side{
+  position:sticky;
+  top:16px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:14px;
+  backdrop-filter:blur(10px);
+}
+.side-title{font-weight:800;letter-spacing:-.3px;margin:4px 0 10px}
+.side-subtitle{color:var(--muted);font-weight:700;font-size:13px;margin:12px 0 8px}
+.side-divider{height:1px;background:rgba(226,232,240,.9);margin:10px 0}
+.side-item{width:100%;justify-content:flex-start}
+
+.mainview{min-width:0}
+
 .view{display:none;}
 .view.active{display:block; background:rgba(255,255,255,.92); border:1px solid var(--border); border-radius:18px; padding:22px; backdrop-filter:blur(10px)}
+
+@media (max-width: 860px){
+  .layout{grid-template-columns:1fr;}
+  .side{position:relative;top:auto;}
+}
+
 
 h1{margin:0 0 14px; font-size:28px; letter-spacing:-.4px}
 .muted{color:var(--muted); margin:0 0 18px}
