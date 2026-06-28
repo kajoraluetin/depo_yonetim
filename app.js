@@ -313,6 +313,73 @@ function renderPreviewRows(rows, columns){
 }
 
 
+function findHeaderRowIndex(ws, headerCandidates){
+  // headerCandidates: ['No','Mal',...] gibi olası kolon adları
+  const range = XLSX.utils.decode_range(ws['!ref']);
+  const maxRow = range.e.r;
+
+  // Hücre değerlerini okuyup "başlıklar var mı" diye bakıyoruz.
+  for(let r = range.s.r; r <= maxRow; r++){
+    const rowKeys = new Set();
+
+    for(let c = range.s.c; c <= range.e.c; c++){
+      const addr = XLSX.utils.encode_cell({r, c});
+      const cell = ws[addr];
+      if(!cell) continue;
+      const v = cell.v;
+      if(v === null || v === undefined) continue;
+      const txt = (typeof v === 'string' ? v : String(v)).replace(/\s+/g,' ').trim();
+      if(txt) rowKeys.add(normalizeHeader(txt));
+    }
+
+    let hit = 0;
+    for(const cand of headerCandidates){
+      if(rowKeys.has(normalizeHeader(cand))) hit++;
+    }
+
+    // Bu başlıklar var ise büyük ihtimalle doğru satır
+    if(hit >= Math.max(3, Math.floor(headerCandidates.length * 0.35))) return r;
+  }
+
+  return null;
+}
+
+function sheetToJsonWithHeaderAt(ws, headerRowIdx){
+  const range = XLSX.utils.decode_range(ws['!ref']);
+  const startRow = headerRowIdx + 1;
+
+  // header isimlerini oku (başlık satırındaki non-empty hücreler)
+  const header = [];
+  for(let c = range.s.c; c <= range.e.c; c++){
+    const addr = XLSX.utils.encode_cell({r: headerRowIdx, c});
+    const cell = ws[addr];
+    const v = cell?.v;
+    const txt = (v === undefined || v === null) ? '' : (typeof v === 'string' ? v : String(v)).replace(/\s+/g,' ').trim();
+    header[c - range.s.c] = txt;
+  }
+
+  const json = [];
+  for(let r = startRow; r <= range.e.r; r++){
+    const obj = {};
+    let hasAny = false;
+
+    for(let c = range.s.c; c <= range.e.c; c++){
+      const h = header[c - range.s.c];
+      if(!h) continue;
+      const addr = XLSX.utils.encode_cell({r, c});
+      const cell = ws[addr];
+      const v = cell?.v;
+      if(v !== undefined && v !== null && String(v).trim() !== '') hasAny = true;
+      obj[normalizeHeader(h)] = v === undefined ? '' : v;
+    }
+
+    if(!hasAny) continue;
+    json.push(obj);
+  }
+
+  return json;
+}
+
 async function handleUpload(file){
   if(!file) return;
   const meta = $('#uploadMeta');
@@ -323,8 +390,21 @@ async function handleUpload(file){
   const sheetName = wb.SheetNames[0];
   const ws = wb.Sheets[sheetName];
 
-  // header row'u ilk satır kabul et
-  const json = XLSX.utils.sheet_to_json(ws, {defval:'', raw:true});
+  // Başlık satırını bul: verilen şemadaki kolon adlarıyla eşleştir
+  const headerCandidates = [
+    'No','Mal','Lot','Ambar-konumu','Ambar grubu','Sorumlu Personel',
+    'Ürün Açıklaması','Atık','Min.Stok.Seviyesi','Minimum Temin Miktarı',
+    'Ortalama fiyat','Toplam Stok Miktarı','Stok Kırılım Miktarı',
+    'Malzeme Alım Tarihi','Ambar birimi','Proje','İşletim dilinde tanım'
+  ];
+
+  const headerRowIdx = findHeaderRowIndex(ws, headerCandidates);
+  if(headerRowIdx === null){
+    meta.textContent = 'Başlık satırı bulunamadı. Dosya şemasını kontrol edin.';
+    return;
+  }
+
+  const json = sheetToJsonWithHeaderAt(ws, headerRowIdx);
   const keys = Array.from(new Set(json.flatMap(o=>Object.keys(o))));
 
   $('#uploadHead').innerHTML = '';
@@ -334,8 +414,9 @@ async function handleUpload(file){
   const previewCols = pickPreviewColumns(keys);
   renderPreviewRows(preview, previewCols);
 
-  meta.textContent = `Önizleme: ${json.length} satır (kolon: ${previewCols.length}, ilk 30 satır)`;
+  meta.textContent = `Önizleme: ${json.length} satır (başlık satırı: ${headerRowIdx+1}, kolon: ${previewCols.length}, ilk 30 satır)`;
 }
+
 
 $('#btnProcessUpload').addEventListener('click', async ()=>{
   const input = $('#uploadFile');
