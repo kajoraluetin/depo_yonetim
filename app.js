@@ -390,6 +390,9 @@ async function handleUpload(file){
   const sheetName = wb.SheetNames[0];
   const ws = wb.Sheets[sheetName];
 
+  // ABAS için her zaman upload alacağız (Fiziki çok nadir)
+  // Bu dosyada ABAS/Fiziki ayrımını şimdilik yapmıyoruz; sadece doğru veri satırlarını alıyoruz.
+
   // Başlık satırını bul: verilen şemadaki kolon adlarıyla eşleştir
   const headerCandidates = [
     'No','Mal','Lot','Ambar-konumu','Ambar grubu','Sorumlu Personel',
@@ -416,6 +419,7 @@ async function handleUpload(file){
 
   meta.textContent = `Önizleme: ${json.length} satır (başlık satırı: ${headerRowIdx+1}, kolon: ${previewCols.length}, ilk 30 satır)`;
 }
+
 
 
 $('#btnProcessUpload').addEventListener('click', async ()=>{
